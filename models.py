@@ -1,11 +1,23 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
+from database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-Base = declarative_base()
+#sqlalchemy model for inventory
+class Inventory(Base):
+    __tablename__ =  "inventory"
+    id = Column(Integer, primary_key=True, index=True)
+    
+    total_copies = Column(Integer)
+    shelf = Column(String)
+    cover_type = Column(String)
+    time_updated = Column(DateTime(timezone=True), onupdate=func.now())
+
+    book_id = Column(Integer,ForeignKey("book.id"))
+    item = relationship('Book', back_populates='inventory')
 
 
+#sqlalchemy model for book
 class Book(Base):
     __tablename__ = "book"
     id = Column(Integer, primary_key=True, index=True)
@@ -14,5 +26,10 @@ class Book(Base):
     author = Column(String)
     category = Column(String)
     time_created = Column(DateTime(timezone=True), server_default=func.now())
+
+    inventory = relationship('Inventory', back_populates='item')
+
+
+    
     
     

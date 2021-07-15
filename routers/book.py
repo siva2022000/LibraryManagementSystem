@@ -1,17 +1,21 @@
 from fastapi import APIRouter,Depends
-from schema import Book as SchemaBook
+import schemas
 from sqlalchemy.orm import Session
 from repository import book
 import database
 
+#reference to current session
 get_db = database.get_db
+
+#reference to router related to books
 router = APIRouter(
     prefix = "/book",
     tags = ["Book"]
 )
 
 
-
-@router.post("/", response_model=SchemaBook)
-def add_book(request: SchemaBook,db: Session = Depends(get_db)):
+#route to add books to the database
+@router.post("/")
+def add_book(request: schemas.Book,db: Session = Depends(get_db)):
     return book.add_book(request,db)
+

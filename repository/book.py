@@ -1,13 +1,14 @@
-from models import Book as ModelBook
-from schema import Book as SchemaBook
+import models
+import schemas
 from sqlalchemy.orm import Session
 from fastapi import Depends
 
 
-
-def add_book(request: SchemaBook,db: Session):
-    db_book = ModelBook(title=request.title, rating=request.rating, author=request.author,category = request.category)
-    db.add(db_book)
+#adds book to the database
+def add_book(request: schemas.Book,db: Session):
+    new_book = models.Book(title=request.title, rating=request.rating, author=request.author,category = request.category)
+    db.add(new_book)
     db.commit()
-    db.refresh(db_book)
-    return db_book
+    db.refresh(new_book)
+    return new_book
+
