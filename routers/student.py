@@ -33,3 +33,7 @@ def get_student_details(name:str,db:Session(get_db)= Depends(get_db)):
 def issue_book(student_name:str,book_title:str,db:Session(get_db) = Depends(get_db)):
     return student.issue_book(student_name,book_title,db)
 
+@router.put("/{student_name}/return_book")
+def return_book(student_name:str,book_title:str,db:Session(get_db) = Depends(get_db)):
+    return student.return_book(student_name,book_title,db)
+

@@ -3,7 +3,7 @@ from fastapi import APIRouter,Depends
 from sqlalchemy.orm import Session
 from repository import inventory
 import database
-
+import schemas
 #reference to current session
 get_db = database.get_db
 
@@ -24,8 +24,15 @@ def update_book_details(title:str,row:Optional[str]=None,total_copies:Optional[i
 def get_all_books_details(db:Session(get_db)= Depends(get_db)):
     return inventory.get_books_details(db)
 
+
+@router.get("/popular_books")
+def get_popular_books(db:Session(get_db)= Depends(get_db)):
+    return inventory.get_popular_books(db)
+
 #route to get details about specific book in inventory based on name
 @router.get("/{title}")
 def show_book_in_inventory(title:str,db:Session(get_db)= Depends(get_db)):
     return inventory.show_in_inventory(title,db)
+
+
 

@@ -1,3 +1,4 @@
+from sqlalchemy.sql.functions import mode
 import models
 from sqlalchemy.orm import Session
 from fastapi import Depends,HTTPException,status
@@ -30,4 +31,7 @@ def update_details(title:str,db:Session,row:Optional[str]=None,copies:Optional[i
     if copies:                        
         new_book.update({"total_copies" : copies,"available_copies": copies})  
     db.commit()
-    return 'updated'   
+    return 'updated'
+
+def get_popular_books(db:Session):
+    return db.query(models.Inventory.book_title,models.Inventory.total_issues).order_by(models.Inventory.total_issues.desc()).limit(5).all()   
