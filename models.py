@@ -1,3 +1,4 @@
+from re import I
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from database import Base
 from sqlalchemy.orm import relationship
@@ -7,7 +8,7 @@ from sqlalchemy.sql import func
 
 #sqlalchemy model for book
 class Book(Base):
-    __tablename__ = "book"
+    __tablename__ = "books"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     rating = Column(Integer)
@@ -21,16 +22,26 @@ class Book(Base):
 class Inventory(Base):
     __tablename__ =  "inventory"
     id = Column(Integer, primary_key=True, index=True)
-    book_id = Column(Integer,ForeignKey("book.id"))
-    total_copies = Column(Integer)
+    book_id = Column(Integer,ForeignKey("books.id"))
+    book_title = Column(String)
+    total_copies = Column(Integer,default=0)
+    available_copies = Column(Integer,default=0)
     shelf = Column(String)
-    cover_type = Column(String)
     time_created = Column(DateTime(timezone=True), server_default=func.now())
     time_updated = Column(DateTime(timezone=True), onupdate=func.now())
-    issues = Column(String)
+    total_issues = Column(Integer,default=0)
     
     item = relationship('Book', back_populates='inventory')
 
+
+#sqlalchemy model for students table
+class Student(Base):
+    __tablename__ = "students"
+    id = Column(Integer,primary_key=True,index=True)
+    name = Column(String)
+    age = Column(Integer)
+    gender = Column(String)
+    books_count = Column(Integer,default=0)
 
 
     

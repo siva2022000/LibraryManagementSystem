@@ -20,10 +20,19 @@ class Inventory(BaseModel):
     class Config:
         orm_mode = True
 
+#pydantic schema for student
+class Student(BaseModel):
+    name:str
+    age:int
+    gender:str
+
+    class Config:
+        orm_mode = True        
+
 class ShowInventory(BaseModel):
     total_copies: int
     shelf:str
     cover_type:str
-    item : Book
+    
     class Config:
         orm_mode = True

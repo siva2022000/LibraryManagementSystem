@@ -9,6 +9,11 @@ def add_book(request: schemas.Book,db: Session):
     new_book = models.Book(title=request.title, rating=request.rating, author=request.author,category = request.category)
     db.add(new_book)
     db.commit()
+    
+    
+    new_book_in_inventory = models.Inventory(book_id = new_book.id,book_title=request.title)
+    db.add(new_book_in_inventory)
+    db.commit()
     db.refresh(new_book)
     return new_book
 
