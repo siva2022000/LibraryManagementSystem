@@ -1,4 +1,5 @@
 from re import I
+from repository import book
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from database import Base
 from sqlalchemy.orm import relationship
@@ -42,6 +43,15 @@ class Student(Base):
     age = Column(Integer)
     gender = Column(String)
     books_count = Column(Integer,default=0)
+
+#sqlalchemy model for table which store date about books issue    
+class Issue_log(Base):
+    __tablename__ = "issue_log"
+    id = id = Column(Integer,primary_key=True,index=True)
+    book_id = Column(Integer,ForeignKey("books.id"))
+    student_id = Column(Integer,ForeignKey("students.id"))
+    issued_time = Column(DateTime(timezone=True), server_default=func.now())
+    return_time = Column(DateTime(timezone=True), onupdate=func.now())
 
 
     
