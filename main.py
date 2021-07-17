@@ -3,10 +3,10 @@ import models
 from database import engine
 from routers import book,inventory,student
 
-#refernce to start the server 
+#reference to start the server 
 app = FastAPI()
 
-#creates tables using in the libray_db database using models defined in models class
+#creates tables in the libray_db database using models defined in models class
 models.Base.metadata.create_all(engine)
 
 #adds routes to the server

@@ -1,9 +1,8 @@
-from typing import Optional
-from fastapi import APIRouter,Depends
+from fastapi import APIRouter,Depends,status
 from sqlalchemy.orm import Session
 from repository import inventory
 import database
-import schemas
+
 #reference to current session
 get_db = database.get_db
 
@@ -13,15 +12,15 @@ router = APIRouter(
     tags = ["Inventory"]
 )
 
-#route to update row and total_copies column related to book with given title in inventory 
-@router.put("/{title}")
-def update_book_details(title:str,row:Optional[str]=None,total_copies:Optional[int] = None,db:Session(get_db)= Depends(get_db)):
-    return inventory.update_details(title,db,row,total_copies)
+#route to update total_copies column related to book with given title in inventory 
+@router.put("/{title}",status_code=status.HTTP_202_ACCEPTED)
+def add_new_copies(title:str,additional_copies:int,db:Session(get_db)= Depends(get_db)):
+    return inventory.update_details(title,db,additional_copies)
 
 
 #route to display details of books in Inventory
 @router.get("/")
-def get_all_books_details(db:Session(get_db)= Depends(get_db)):
+def show_inventory(db:Session(get_db)= Depends(get_db)):
     return inventory.get_books_details(db)
 
 

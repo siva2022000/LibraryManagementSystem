@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends
+from fastapi import APIRouter,Depends,status
 import schemas
 from sqlalchemy.orm import Session
 from repository import student
@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 #route to register student in the database
-@router.post("/")
+@router.post("/",status_code=status.HTTP_201_CREATED)
 def register_student(request: schemas.Student,db: Session = Depends(get_db)):
     return student.register_student(request,db)
 
@@ -29,10 +29,12 @@ def get_all_students_list(db:Session(get_db)= Depends(get_db)):
 def get_student_details(name:str,db:Session(get_db)= Depends(get_db)):
     return student.get_details(name,db) 
 
+#route for the student to issue book
 @router.put("/{student_name}/issue_book")
 def issue_book(student_name:str,book_title:str,db:Session(get_db) = Depends(get_db)):
     return student.issue_book(student_name,book_title,db)
 
+#route for the student to return book
 @router.put("/{student_name}/return_book")
 def return_book(student_name:str,book_title:str,db:Session(get_db) = Depends(get_db)):
     return student.return_book(student_name,book_title,db)
