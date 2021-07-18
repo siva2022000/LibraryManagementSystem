@@ -12,7 +12,7 @@ router = APIRouter(
     tags = ["Inventory"]
 )
 
-#route to update total_copies column related to book with given title in inventory 
+#route to update total_copies of book with given title in inventory 
 @router.put("/{title}",status_code=status.HTTP_202_ACCEPTED)
 def add_new_copies(title:str,additional_copies:int,db:Session(get_db)= Depends(get_db)):
     return inventory.update_details(title,db,additional_copies)
@@ -23,7 +23,7 @@ def add_new_copies(title:str,additional_copies:int,db:Session(get_db)= Depends(g
 def show_inventory(db:Session(get_db)= Depends(get_db)):
     return inventory.get_books_details(db)
 
-
+#route to display top 5 popular books issued by students
 @router.get("/popular_books")
 def get_popular_books(db:Session(get_db)= Depends(get_db)):
     return inventory.get_popular_books(db)

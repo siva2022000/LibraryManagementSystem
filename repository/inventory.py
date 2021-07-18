@@ -43,6 +43,6 @@ def update_details(title:str,db:Session,copies:int):
 
 #code that returns the list of books with most number of issues
 def get_popular_books(db:Session):
-    #inner join Book and Inventory table and display titles and total_issues columns
+    #inner join Book and Inventory tables and display titles and total_issues columns
     return db.query(models.Book.title,models.Inventory.total_issues).filter(models.Inventory.book_id == models.Book.id).\
         order_by(models.Inventory.total_issues.desc()).limit(5).all()

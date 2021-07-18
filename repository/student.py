@@ -45,7 +45,7 @@ def issue_book(student_name:str,book_title:str,db:Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'Book with given title {book_title} does not exist')
 
-    #get row related to book with given inventory table
+    #get row related to book in the inventory table using book's id 
     in_book = db.query(models.Inventory).filter(models.Inventory.book_id == book.id).first()
     
     
