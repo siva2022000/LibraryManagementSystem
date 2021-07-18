@@ -27,10 +27,10 @@ LIBRARYMANAGEMENTSYSTEM
 |       __init__.py
 |
 \\---routers
-book.py
-inventory.py
-student.py
-__init__.py
+      book.py
+      inventory.py
+      student.py
+      __init__.py
 
 ---
 
