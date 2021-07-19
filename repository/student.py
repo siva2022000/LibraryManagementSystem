@@ -1,8 +1,14 @@
+from datetime import datetime
+from sqlalchemy.sql.elements import Null
+from sqlalchemy.sql.expression import null
 from sqlalchemy.sql.functions import func
+from sqlalchemy.sql.sqltypes import NullType
+from sqlalchemy.sql.type_api import NULLTYPE
 from starlette.status import HTTP_400_BAD_REQUEST
 import models
 import schemas
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 from fastapi import Depends,HTTPException,status
 
 
@@ -79,12 +85,12 @@ def issue_book(student_name:str,book_title:str,db:Session):
 def return_book(student_name:str,book_title:str,db:Session):
     #get student row with given student_name
     student = db.query(models.Student).filter(models.Student.name == student_name).first()
-
+    
     #If the student is not present,raise exception
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'Student with given name {student_name} does not exist')
-
+    
     #get row related to book with given book table
     book = db.query(models.Book).filter(models.Book.title == book_title).first()
 
@@ -94,15 +100,23 @@ def return_book(student_name:str,book_title:str,db:Session):
                             detail=f'Book with given title {book_title} does not exist')
 
     #get row related to book with given inventory table
+    
     in_book = db.query(models.Inventory).filter(models.Inventory.book_id == book.id).first()
-    issue_item = db.query(models.Issue_log).filter(models.Issue_log.book_id == in_book.book_id and models.Issue_log.student_id == student.id).first()
+    
+    #if the return_time in issue_log is zero_time object, then it denotes that the book is not still returned
+    
+    issue_item = db.query(models.Issue_log).filter(and_(models.Issue_log.book_id == in_book.book_id,
+    models.Issue_log.student_id == student.id,models.Issue_log.return_time == None)).first()
+    
     if not issue_item:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
         detail = f'Book {book_title} is not issued to student {student_name}')
-
+    
     student.books_count = student.books_count - 1
     in_book.available_copies = in_book.available_copies + 1
     issue_item.return_time = func.now()
     db.commit()
-    return f'{book_title} is returned by {student_name}'       
+    
+    return f'{book_title} is returned by {student_name}' 
+    
                             
