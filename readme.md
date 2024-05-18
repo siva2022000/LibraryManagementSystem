@@ -41,17 +41,21 @@ LIBRARYMANAGEMENTSYSTEM
 
 ---
 
-##### Installation and Running Server
+##### Installation and Running Server in ubuntu
+1. create a python environment
 
-1. Run the following command to install all the packages and dependencies
-
-   > -$ poetry install
+   > -$ python3 -m venv .venv
    >
 2. Activate the python environment using following command
 
-   > -$ .venv\Scripts\activate
+   > -$ source .venv/bin/activate
    >
-3. Code to run the server
+3. Run the following command to install all the packages and dependencies
+
+   > -$ poetry install
+   >
+
+4. Code to run the server
 
    > -$ uvicorn main:app --reload
    >
@@ -112,5 +116,6 @@ LIBRARYMANAGEMENTSYSTEM
 * "pyproject.toml" file - used to install packages and dependencies
 * "routes" folder - contains files which contain code related to different api endpoints
 * "repository" folder - contains files which provide functionalities to the different api endpoints in router folder
+* connect to fastapi swagger ui using http://localhost:8000/docs
 
 ---
